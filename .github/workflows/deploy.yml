@@ -1,33 +1,9 @@
-name: Deploy to itch.io
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - name: Install Dependencies & Build Project
-        run: |
-          bun install
-          bun run build
-
-      - name: Deploy to itch.io via Butler
+- name: Deploy to itch.io via Butler
         uses: Ayowel/butler-to-itch@v2
         with:
           butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
           itch_user: hunarskillmaster
-          itch_game: QuantumLab
+          itch_game: quantumlab
+          CHANNEL: html5
+          PACKAGE: dist
           version: ${{ github.ref_name }}
-          files: |
-            dist/*
