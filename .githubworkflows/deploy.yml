@@ -26,6 +26,6 @@ jobs:
         uses: JosephMcNamara/action-itch-publish@v1
         with:
           butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
-          game: your-itch-username/your-game-title
+          game: hunarskillmaster/QuantumLab
           channel: html5
           package: ./dist # Vite's default output directory
