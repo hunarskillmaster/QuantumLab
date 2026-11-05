@@ -1,4 +1,31 @@
-- name: Deploy to itch.io via Butler
+name: Deploy to Itch.io
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  deploy-to-itch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Web Game
+        run: npm run build
+
+      - name: Deploy to itch.io via Butler
         uses: Ayowel/butler-to-itch@v2
         with:
           butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
