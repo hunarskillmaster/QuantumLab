@@ -1,0 +1,31 @@
+name: Deploy to itch.io
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers deployment when you push a version tag like v1.0.0
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies & Build Project
+        run: |
+          bun install
+          bun run build
+
+      - name: Deploy to itch.io via Butler
+        uses: JosephMcNamara/action-itch-publish@v1
+        with:
+          butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
+          game: your-itch-username/your-game-title
+          channel: html5
+          package: ./dist # Vite's default output directory
