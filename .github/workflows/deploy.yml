@@ -3,7 +3,7 @@ name: Deploy to itch.io
 on:
   push:
     tags:
-      - 'v*' # Triggers deployment when you push a version tag like v1.0.0
+      - 'v*'
 
 jobs:
   build-and-deploy:
@@ -23,9 +23,11 @@ jobs:
           bun run build
 
       - name: Deploy to itch.io via Butler
-        uses: JosephMcNamara/action-itch-publish@v1
+        uses: Ayowel/butler-to-itch@v2
         with:
           butler_key: ${{ secrets.BUTLER_CREDENTIALS }}
-          game: hunarskillmaster /QuantumLab
-          channel: html5
-          package: ./dist # Vite's default output directory
+          itch_user: hunarskillmaster
+          itch_game: QuantumLab
+          version: ${{ github.ref_name }}
+          files: |
+            dist/*
